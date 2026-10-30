@@ -1,0 +1,18 @@
+{
+  "id": "analista-analista-de-sistemas-ebal-ifba-2010",
+  "url": "https://www.pciconcursos.com.br/provas/download/analista-analista-de-sistemas-ebal-ifba-2010",
+  "cargo": "Analista - Analista de Sistemas",
+  "ano": "2010",
+  "orgao": "EBAL",
+  "banca": "IFBA",
+  "arquivos": [
+    {
+      "arquivo": "gabaritos_ebal.pdf",
+      "tipo": "gabarito"
+    },
+    {
+      "arquivo": "prova_610_analista_analistadesistemas.pdf",
+      "tipo": "prova"
+    }
+  ]
+}

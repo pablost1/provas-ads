@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.env*
+*.log
+# perfis de navegador (cookies/sessoes)
+data/brave-profile/
+data/browser-profile/

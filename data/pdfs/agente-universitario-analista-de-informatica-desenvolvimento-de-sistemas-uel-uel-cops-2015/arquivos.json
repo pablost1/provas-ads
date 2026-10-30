@@ -1,0 +1,18 @@
+{
+  "id": "agente-universitario-analista-de-informatica-desenvolvimento-de-sistemas-uel-uel-cops-2015",
+  "url": "https://www.pciconcursos.com.br/provas/download/agente-universitario-analista-de-informatica-desenvolvimento-de-sistemas-uel-uel-cops-2015",
+  "cargo": "Agente Universitário - Analista de Informática/ Desenvolvimento de Sistemas",
+  "ano": "2015",
+  "orgao": "UEL",
+  "banca": "UEL/COPS",
+  "arquivos": [
+    {
+      "arquivo": "analista_de_informatica_desenvolvimento_de_sistemas.pdf",
+      "tipo": "prova"
+    },
+    {
+      "arquivo": "gab_provisorio_todos_cargos.pdf",
+      "tipo": "gabarito"
+    }
+  ]
+}

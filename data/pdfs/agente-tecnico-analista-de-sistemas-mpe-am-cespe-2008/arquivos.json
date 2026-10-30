@@ -1,0 +1,18 @@
+{
+  "id": "agente-tecnico-analista-de-sistemas-mpe-am-cespe-2008",
+  "url": "https://www.pciconcursos.com.br/provas/download/agente-tecnico-analista-de-sistemas-mpe-am-cespe-2008",
+  "cargo": "Agente Técnico - Analista de Sistemas",
+  "ano": "2008",
+  "orgao": "MPE/AM",
+  "banca": "CESPE",
+  "arquivos": [
+    {
+      "arquivo": "gab_definitivo_mpeamadm_003_3.pdf",
+      "tipo": "gabarito"
+    },
+    {
+      "arquivo": "mpeamadm_003_3.pdf",
+      "tipo": "prova"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "analista-sistemas-cvm-esaf-2010",
+  "url": "https://www.pciconcursos.com.br/provas/download/analista-sistemas-cvm-esaf-2010",
+  "cargo": "Analista - Sistemas",
+  "ano": "2010",
+  "orgao": "CVM",
+  "banca": "ESAF",
+  "arquivos": [
+    {
+      "arquivo": "gabaritos.pdf",
+      "tipo": "gabarito"
+    },
+    {
+      "arquivo": "prova1_analista_outras_areas_p1g1.pdf",
+      "tipo": "prova"
+    },
+    {
+      "arquivo": "prova2_analista_sistemas.pdf",
+      "tipo": "prova"
+    }
+  ]
+}

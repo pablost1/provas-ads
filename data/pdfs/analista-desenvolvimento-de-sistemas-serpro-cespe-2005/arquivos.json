@@ -1,0 +1,18 @@
+{
+  "id": "analista-desenvolvimento-de-sistemas-serpro-cespe-2005",
+  "url": "https://www.pciconcursos.com.br/provas/download/analista-desenvolvimento-de-sistemas-serpro-cespe-2005",
+  "cargo": "Analista - Desenvolvimento de Sistemas",
+  "ano": "2005",
+  "orgao": "SERPRO",
+  "banca": "CESPE",
+  "arquivos": [
+    {
+      "arquivo": "gab_definit_serpro.pdf",
+      "tipo": "gabarito"
+    },
+    {
+      "arquivo": "serpro_cargo_06_final.pdf",
+      "tipo": "prova"
+    }
+  ]
+}

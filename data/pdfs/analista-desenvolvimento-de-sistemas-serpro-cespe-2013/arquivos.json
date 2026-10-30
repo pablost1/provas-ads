@@ -1,0 +1,26 @@
+{
+  "id": "analista-desenvolvimento-de-sistemas-serpro-cespe-2013",
+  "url": "https://www.pciconcursos.com.br/provas/download/analista-desenvolvimento-de-sistemas-serpro-cespe-2013",
+  "cargo": "Analista - Desenvolvimento de Sistemas",
+  "ano": "2013",
+  "orgao": "SERPRO",
+  "banca": "CESPE",
+  "arquivos": [
+    {
+      "arquivo": "analista_desenv_sistemas_7.pdf",
+      "tipo": "prova"
+    },
+    {
+      "arquivo": "gabaritos_conhec_especificos.pdf",
+      "tipo": "gabarito"
+    },
+    {
+      "arquivo": "gab_preliminar_serpro13_cbns1_01.pdf",
+      "tipo": "gabarito"
+    },
+    {
+      "arquivo": "serpro13_cbns1_01.pdf",
+      "tipo": "prova"
+    }
+  ]
+}

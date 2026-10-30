@@ -1,0 +1,18 @@
+{
+  "id": "analista-analise-de-sistemas-desenvolvimento-de-sistemas-ibge-fgv-2016",
+  "url": "https://www.pciconcursos.com.br/provas/download/analista-analise-de-sistemas-desenvolvimento-de-sistemas-ibge-fgv-2016",
+  "cargo": "Analista - Análise de Sistemas/ Desenvolvimento de Sistemas",
+  "ano": "2016",
+  "orgao": "IBGE",
+  "banca": "FGV",
+  "arquivos": [
+    {
+      "arquivo": "analista_analise_sistemas_desenvolv_sistemas_tipo_1.pdf",
+      "tipo": "prova"
+    },
+    {
+      "arquivo": "gab_preliminar_todos_cargos.pdf",
+      "tipo": "gabarito"
+    }
+  ]
+}

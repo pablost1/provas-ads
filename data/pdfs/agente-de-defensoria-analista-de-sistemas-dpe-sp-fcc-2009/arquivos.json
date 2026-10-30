@@ -1,0 +1,18 @@
+{
+  "id": "agente-de-defensoria-analista-de-sistemas-dpe-sp-fcc-2009",
+  "url": "https://www.pciconcursos.com.br/provas/download/agente-de-defensoria-analista-de-sistemas-dpe-sp-fcc-2009",
+  "cargo": "Agente de Defensoria - Analista de Sistemas",
+  "ano": "2009",
+  "orgao": "DPE/SP",
+  "banca": "FCC",
+  "arquivos": [
+    {
+      "arquivo": "gabaritos_dpe_sp.pdf",
+      "tipo": "gabarito"
+    },
+    {
+      "arquivo": "prova_b01_tipo_001.pdf",
+      "tipo": "prova"
+    }
+  ]
+}

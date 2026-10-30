@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Banco de Questões de TI</title>
+<script>
+  try { const t = localStorage.getItem('tema'); if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+<style>
+  :root{
+    --bg:#f6f7f9; --card:#fff; --text:#1d2330; --muted:#667085; --line:#e3e6ec;
+    --accent:#2457d6; --accent-soft:#e8eefc; --ok:#12805c; --ok-soft:#e3f5ee; --bad:#c0392b; --bad-soft:#fbeae8;
+    --warn:#a15c07; --warn-soft:#fff3dc; --radius:10px; --shadow:0 1px 2px #1d233014, 0 8px 24px #1d23300f;
+  }
+  :root{color-scheme:light}
+  :root[data-theme="dark"]{
+    color-scheme:dark;
+    --bg:#0f1218; --card:#181d26; --text:#e8eaf0; --muted:#9aa3b2; --line:#2a3140;
+    --accent:#7ea2ff; --accent-soft:#1f2a47; --ok:#4cc79a; --ok-soft:#133126; --bad:#ff8577; --bad-soft:#3a1d1a;
+    --warn:#f0b45a; --warn-soft:#382a10; --shadow:0 1px 2px #0006, 0 8px 24px #0004;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      color-scheme:dark;
+      --bg:#0f1218; --card:#181d26; --text:#e8eaf0; --muted:#9aa3b2; --line:#2a3140;
+      --accent:#7ea2ff; --accent-soft:#1f2a47; --ok:#4cc79a; --ok-soft:#133126; --bad:#ff8577; --bad-soft:#3a1d1a;
+      --warn:#f0b45a; --warn-soft:#382a10; --shadow:0 1px 2px #0006, 0 8px 24px #0004;
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  header{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--line)}
+  .bar{max-width:1200px;margin:0 auto;padding:0 16px;display:flex;align-items:center;gap:20px;height:52px}
+  .logo{font-weight:700;letter-spacing:-.01em}
+  nav{display:flex;gap:4px}
+  nav button{border:0;background:none;color:var(--muted);font:inherit;padding:8px 12px;border-radius:8px;cursor:pointer}
+  nav button:hover{background:var(--bg)} nav button.on{color:var(--accent);background:var(--accent-soft);font-weight:600}
+  main{max-width:1200px;margin:0 auto;padding:20px 16px 60px}
+  .layout{display:grid;grid-template-columns:290px 1fr;gap:24px;align-items:start}
+  @media (max-width:860px){.layout{grid-template-columns:1fr}}
+  aside{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;position:sticky;top:68px;max-height:calc(100vh - 84px);overflow:auto}
+  @media (max-width:860px){aside{position:static;max-height:none}}
+  aside h3{margin:16px 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+  aside h3:first-child{margin-top:0}
+  select,input[type=search]{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);font:inherit}
+  .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .chip{border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:999px;padding:3px 10px;font-size:13px;cursor:pointer}
+  .chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .chip small{opacity:.65;margin-left:4px}
+  .tag{display:inline-block;border-radius:6px;padding:1px 8px;font-size:12px;background:var(--accent-soft);color:var(--accent)}
+  .tag.gray{background:var(--bg);color:var(--muted);border:1px solid var(--line)}
+  .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .grow{flex:1}
+  .btn{border:1px solid var(--line);background:var(--card);color:var(--text);padding:8px 14px;border-radius:8px;font:inherit;cursor:pointer}
+  .btn:hover{border-color:var(--accent)} .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn:disabled{opacity:.45;cursor:default}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin-bottom:14px}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px;color:var(--muted);font-size:13px}
+  .meta b{color:var(--text)}
+  .enun{white-space:pre-wrap;overflow-wrap:anywhere;margin:6px 0 12px}
+  .pdf-link{font-size:.85em;color:var(--muted);text-decoration:none;border-bottom:1px dotted currentColor}
+  .pdf-link:hover{color:var(--text)}
+  .apoio{border-left:3px solid var(--line, #8885);padding:2px 0 2px 12px;margin:6px 0 12px;font-size:.95em}
+  .apoio summary{cursor:pointer;color:var(--muted, #888);font-size:.85em;margin-bottom:4px}
+  .apoio .enun{margin:4px 0}
+  .figs{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 14px}
+  .figs img{max-width:100%;border:1px solid var(--line);border-radius:8px;background:#fff}
+  .alts{display:flex;flex-direction:column;gap:8px}
+  .alt{display:flex;gap:12px;text-align:left;width:100%;border:1px solid var(--line);background:var(--card);color:var(--text);
+       border-radius:8px;padding:10px 12px;font:inherit;cursor:pointer}
+  .alt:hover:not(:disabled){border-color:var(--accent)}
+  .alt .l{flex:none;width:26px;height:26px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-weight:600;font-size:13px}
+  .alt .t{white-space:pre-wrap;overflow-wrap:anywhere}
+  .alt.sel{border-color:var(--accent);background:var(--accent-soft)} .alt.sel .l{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .alt.ok{border-color:var(--ok);background:var(--ok-soft)} .alt.ok .l{background:var(--ok);color:#fff;border-color:var(--ok)}
+  .alt.bad{border-color:var(--bad);background:var(--bad-soft)} .alt.bad .l{background:var(--bad);color:#fff;border-color:var(--bad)}
+  .alt:disabled{cursor:default}
+  .fb{margin-top:12px;padding:10px 12px;border-radius:8px;font-weight:600}
+  .fb.ok{background:var(--ok-soft);color:var(--ok)} .fb.bad{background:var(--bad-soft);color:var(--bad)} .fb.warn{background:var(--warn-soft);color:var(--warn)}
+  .muted{color:var(--muted)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+  .nav-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(40px,1fr));gap:6px}
+  .nav-grid button{height:36px;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:8px;cursor:pointer;font:inherit;position:relative}
+  .nav-grid button.done{background:var(--accent-soft);border-color:var(--accent)}
+  .nav-grid button.cur{outline:2px solid var(--accent)}
+  .nav-grid button.flag::after{content:"";position:absolute;top:3px;right:3px;width:7px;height:7px;border-radius:50%;background:var(--warn)}
+  .nav-grid button.ok{background:var(--ok-soft);border-color:var(--ok)} .nav-grid button.bad{background:var(--bad-soft);border-color:var(--bad)}
+  .score{font-size:44px;font-weight:700;letter-spacing:-.02em}
+  .bars{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+  .bar-row{display:grid;grid-template-columns:minmax(120px,220px) 1fr 70px;gap:10px;align-items:center;font-size:14px}
+  .track{height:10px;background:var(--bg);border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+  .fill{height:100%;background:var(--accent)}
+  .fill.low{background:var(--bad)} .fill.mid{background:var(--warn)} .fill.high{background:var(--ok)}
+  .sticky-run{position:sticky;top:52px;z-index:4;background:var(--bg);padding:10px 0;margin-bottom:6px}
+  body{transition:background .2s,color .2s}
+  .logo{display:flex;align-items:center;gap:8px;background:none;border:0;color:var(--text);font:inherit;font-weight:700;cursor:pointer;padding:0}
+  .logo i{font-style:normal;display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:var(--accent);color:#fff;font-size:15px}
+  .icon-btn{border:1px solid var(--line);background:var(--card);color:var(--text);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:16px;line-height:1}
+  .icon-btn:hover{border-color:var(--accent)}
+  .hero{border:1px solid var(--line);border-radius:18px;padding:44px 40px;margin-bottom:26px;box-shadow:var(--shadow);
+        background:radial-gradient(900px 300px at 85% -10%,var(--accent-soft),transparent 70%),var(--card)}
+  .hero .eyebrow{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+  .hero h1{margin:0 0 12px;font-size:clamp(28px,4.4vw,42px);line-height:1.15;letter-spacing:-.02em;max-width:24ch}
+  .hero p{margin:0 0 22px;max-width:62ch;font-size:17px;color:var(--muted)}
+  .btn.lg{padding:11px 20px;font-size:16px;border-radius:10px}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:30px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px 18px;box-shadow:var(--shadow)}
+  .stat b{display:block;font-size:28px;letter-spacing:-.02em;line-height:1.2}
+  .stat span{color:var(--muted);font-size:13px}
+  .sec-title{margin:34px 0 14px;font-size:22px;letter-spacing:-.01em}
+  .feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+  .feat .card{margin:0;box-shadow:var(--shadow);transition:transform .15s,border-color .15s}
+  .feat .card.link{cursor:pointer} .feat .card.link:hover{transform:translateY(-2px);border-color:var(--accent)}
+  .feat .ico{display:grid;place-items:center;width:40px;height:40px;border-radius:10px;background:var(--accent-soft);font-size:20px;margin-bottom:10px}
+  .feat h3{margin:0 0 4px;font-size:16px} .feat p{margin:0;color:var(--muted);font-size:14px}
+  .steps{counter-reset:s;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;padding:0;list-style:none}
+  .steps li{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px 16px 58px;position:relative}
+  .steps li::before{content:counter(s);position:absolute;left:16px;top:16px;width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:700}
+  .steps b{display:block;margin-bottom:2px} .steps span{color:var(--muted);font-size:14px}
+  code.inl{background:var(--accent-soft);color:var(--accent);padding:1px 6px;border-radius:5px;font-size:.9em}
+  .foot{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+  @media (max-width:640px){.hero{padding:28px 20px}.bar{gap:8px}.logo span,#resumo{display:none}nav{flex:1;overflow-x:auto}nav button{padding:8px 9px;font-size:14px;white-space:nowrap}}
+  .empty{text-align:center;color:var(--muted);padding:50px 0}
+  h2{margin:0 0 4px;font-size:20px;letter-spacing:-.01em}
+  kbd{border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 5px;font-size:12px;background:var(--card)}
+</style>
+</head>
+<body>
+<header><div class="bar">
+  <button class="logo" title="Início"><i>✓</i><span>Banco de Questões</span></button>
+  <nav id="nav">
+    <button data-v="inicio">Início</button>
+    <button data-v="questoes">Questões</button>
+    <button data-v="simulado">Simulado</button>
+    <button data-v="desempenho">Desempenho</button>
+  </nav>
+  <span class="grow"></span><span class="muted" id="resumo"></span>
+  <button class="icon-btn" id="tema" aria-label="Alternar modo escuro" title="Alternar modo claro/escuro"></button>
+</div></header>
+<main id="view"></main>
+
+<script>
+const $ = (s, el = document) => el.querySelector(s);
+function h(tag, attrs, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (k === 'class') e.className = v;
+    else if (k.startsWith('on')) e.addEventListener(k.slice(2), v);
+    else if (v === true) e.setAttribute(k, '');
+    else if (v !== false && v != null) e.setAttribute(k, v);
+  }
+  for (const c of kids.flat()) if (c != null && c !== false) e.append(c.nodeType ? c : document.createTextNode(c));
+  return e;
+}
+const api = (p, body) => fetch(p, body ? {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)} : undefined).then(r => r.json());
+const linkProva = (pid, txt = '📄 Abrir prova (PDF)') =>
+  h('a', {class: 'pdf-link', href: '/pdf/' + encodeURIComponent(pid), target: '_blank', rel: 'noopener'}, txt);
+const pct = (a, b) => b ? Math.round(100 * a / b) : 0;
+const clsPct = p => p >= 70 ? 'high' : p >= 50 ? 'mid' : 'low';
+const fmt = s => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+
+let meta = null;
+const F = {assunto: [], banca: '', ano: '', orgao: '', bloco: '', prova: '', disciplina: '', q: '', com_imagem: false, com_gabarito: true, embaralhar: ''};
+let lista = {itens: [], total: 0};
+const respondidas = new Map();   // prática: id -> {resp, correta, gabarito, anulada}
+let keyHandler = null;
+
+/* ---------- componentes ---------- */
+function cartaoQuestao(q, opt = {}) {
+  // opt: {resp, gabarito, anulada, onEscolher(letra), travado, extra}
+  const r = opt.resp || '';
+  const alts = h('div', {class: 'alts'});
+  const marca = () => {
+    for (const b of alts.children) {
+      const l = b.dataset.l;
+      b.className = 'alt';
+      if (opt.gabarito !== undefined && opt.gabarito !== null || opt.anulada) {
+        if (opt.anulada) { if (l === r) b.classList.add('sel'); }
+        else if (l === opt.gabarito) b.classList.add('ok');
+        else if (l === r) b.classList.add('bad');
+      } else if (l === r) b.classList.add('sel');
+    }
+  };
+  for (const [l, t] of Object.entries(q.alternativas))
+    alts.append(h('button', {class: 'alt', 'data-l': l, disabled: !!opt.travado, onclick: () => opt.onEscolher && opt.onEscolher(l)},
+      h('span', {class: 'l'}, l), h('span', {class: 't'}, t || '(ver figura)')));
+  const card = h('div', {class: 'card', id: 'q-' + q.id},
+    h('div', {class: 'meta'}, h('b', {}, `Questão ${q.numero}`), h('span', {}, `${q.banca} ${q.ano}`), h('span', {}, q.orgao), h('span', {}, q.cargo), linkProva(q.prova_id)),
+    h('div', {class: 'row', style: 'margin-bottom:6px'}, q.assuntos.map(a => h('span', {class: 'tag'}, a)),
+      q.disciplina && !q.assuntos.includes(q.disciplina) ? h('span', {class: 'tag gray'}, q.disciplina) : null),
+    q.texto ? h('details', {class: 'apoio', open: true},
+      h('summary', {}, q.texto.de === q.texto.ate ? 'Texto de apoio' : `Texto de apoio (questões ${q.texto.de} a ${q.texto.ate})`),
+      h('div', {class: 'enun'}, q.texto.conteudo)) : null,
+    h('div', {class: 'enun'}, q.enunciado),
+    q.imagens.length ? h('div', {class: 'figs'}, q.imagens.map(i => h('img', {src: '/imagens/' + i, loading: 'lazy', alt: 'figura da questão'}))) : null,
+    alts, opt.extra || null);
+  marca();
+  return card;
+}
+
+function feedback(res) {
+  if (res.sem_gabarito) return h('div', {class: 'fb warn'}, 'Esta prova não tem gabarito disponível, então não dá para corrigir.');
+  if (res.anulada) return h('div', {class: 'fb warn'}, 'Questão anulada pela banca: qualquer resposta é considerada correta.');
+  return res.correta ? h('div', {class: 'fb ok'}, `Correto! Gabarito: ${res.gabarito}`)
+                     : h('div', {class: 'fb bad'}, `Errado. Gabarito: ${res.gabarito}`);
+}
+
+/* ---------- Questões (prática) ---------- */
+function chaves() {
+  const p = new URLSearchParams();
+  F.assunto.forEach(a => p.append('assunto', a));
+  for (const k of ['banca', 'ano', 'orgao', 'bloco', 'prova', 'disciplina', 'q', 'embaralhar']) if (F[k]) p.set(k, F[k]);
+  if (F.com_imagem) p.set('com_imagem', '1');
+  if (F.com_gabarito) p.set('com_gabarito', '1');
+  return p;
+}
+async function carregar(append) {
+  const p = chaves();
+  p.set('limite', 20);
+  p.set('deslocamento', append ? lista.itens.length : 0);
+  const d = await api('/api/questoes?' + p);
+  lista = append ? {total: d.total, itens: lista.itens.concat(d.itens)} : d;
+  desenharLista();
+}
+function opcoes(valores, atual, rotulo) {
+  return [h('option', {value: ''}, rotulo), ...valores.map(v => h('option', {value: v, selected: String(v) === String(atual)}, v))];
+}
+function viewQuestoes() {
+  const sel = (k, vals, rot) => h('select', {onchange: e => { F[k] = e.target.value; carregar(); }}, opcoes(vals, F[k], rot));
+  let tmo;
+  const aside = h('aside', {},
+    h('h3', {}, 'Busca'),
+    h('input', {type: 'search', placeholder: 'palavra no enunciado ou alternativas', value: F.q,
+      oninput: e => { clearTimeout(tmo); tmo = setTimeout(() => { F.q = e.target.value; carregar(); }, 300); }}),
+    h('h3', {}, 'Assunto'),
+    h('div', {class: 'chips', id: 'chips'}, meta.assuntos.map(a =>
+      h('button', {class: 'chip' + (F.assunto.includes(a.nome) ? ' on' : ''), onclick: ev => {
+        const i = F.assunto.indexOf(a.nome); i >= 0 ? F.assunto.splice(i, 1) : F.assunto.push(a.nome);
+        ev.currentTarget.classList.toggle('on'); carregar();
+      }}, a.nome, h('small', {}, a.n)))),
+    h('h3', {}, 'Banca'), sel('banca', meta.bancas, 'Todas'),
+    h('h3', {}, 'Ano'), sel('ano', meta.anos, 'Todos'),
+    h('h3', {}, 'Órgão'), sel('orgao', meta.orgaos, 'Todos'),
+    h('h3', {}, 'Bloco'), sel('bloco', meta.blocos, 'Todos'),
+    h('h3', {}, 'Prova'),
+    h('select', {onchange: e => { F.prova = e.target.value; carregar(); }},
+      [h('option', {value: ''}, 'Todas'), ...meta.provas.map(p => h('option', {value: p.id, selected: p.id === F.prova}, `${p.orgao} ${p.ano} (${p.banca})`))]),
+    h('h3', {}, 'Outros'),
+    h('label', {class: 'row', style: 'margin-bottom:6px'}, h('input', {type: 'checkbox', checked: F.com_gabarito, onchange: e => { F.com_gabarito = e.target.checked; carregar(); }}), 'só com gabarito'),
+    h('label', {class: 'row'}, h('input', {type: 'checkbox', checked: F.com_imagem, onchange: e => { F.com_imagem = e.target.checked; carregar(); }}), 'só com figura'),
+    h('label', {class: 'row', style: 'margin-top:6px'}, h('input', {type: 'checkbox', checked: !!F.embaralhar, onchange: e => { F.embaralhar = e.target.checked ? String(Date.now() % 100000) : ''; carregar(); }}), 'ordem aleatória'),
+    h('div', {style: 'margin-top:14px'}, h('button', {class: 'btn', onclick: () => {
+      Object.assign(F, {assunto: [], banca: '', ano: '', orgao: '', bloco: '', prova: '', disciplina: '', q: '', com_imagem: false, com_gabarito: true, embaralhar: ''});
+      viewQuestoes(); carregar();
+    }}, 'Limpar filtros')));
+  $('#view').replaceChildren(h('div', {class: 'layout'}, aside, h('section', {id: 'lista'})));
+  carregar();
+}
+function desenharLista() {
+  const box = $('#lista');
+  if (!box) return;
+  const nodes = [h('div', {class: 'row', style: 'margin-bottom:12px'}, h('h2', {}, `${lista.total} questões`), h('span', {class: 'muted'}, 'Clique numa alternativa para ver a correção.'))];
+  if (!lista.itens.length) nodes.push(h('div', {class: 'empty'}, 'Nenhuma questão com esses filtros.'));
+  for (const q of lista.itens) {
+    const st = respondidas.get(q.id);
+    const card = cartaoQuestao(q, {
+      resp: st && st.resp, gabarito: st && st.gabarito, anulada: st && st.anulada, travado: !!st,
+      extra: st ? feedback(st) : null,
+      onEscolher: async l => {
+        if (respondidas.has(q.id)) return;
+        const r = await api('/api/tentativas', {questao_id: q.id, resposta: l});
+        respondidas.set(q.id, {resp: l, ...r});
+        card.replaceWith(desenharCartao(q));
+      }});
+    nodes.push(card);
+  }
+  if (lista.itens.length < lista.total) nodes.push(h('button', {class: 'btn', onclick: () => carregar(true)}, `Carregar mais (${lista.total - lista.itens.length})`));
+  box.replaceChildren(...nodes);
+}
+function desenharCartao(q) {
+  const st = respondidas.get(q.id);
+  return cartaoQuestao(q, {resp: st && st.resp, gabarito: st && st.gabarito, anulada: st && st.anulada, travado: !!st, extra: st ? feedback(st) : null});
+}
+
+/* ---------- Simulado ---------- */
+function viewSimulado() {
+  const bancas = meta.bancas;
+  let fb = '';
+  const lista = h('div', {class: 'grid'});
+  const pinta = () => {
+    lista.replaceChildren(...meta.provas.filter(p => !fb || p.banca === fb).map(p =>
+      h('div', {class: 'card', style: 'margin:0'},
+        h('div', {class: 'meta'}, h('span', {class: 'tag'}, p.banca), p.ano),
+        h('div', {style: 'font-weight:600'}, p.orgao), h('div', {class: 'muted'}, p.cargo),
+        h('div', {class: 'row', style: 'margin-top:12px'}, h('span', {class: 'muted'}, `${p.n_questoes} questões`), linkProva(p.id, '📄 PDF'), h('span', {class: 'grow'}),
+          p.n_gabarito === 0 ? h('span', {class: 'tag', style: 'background:var(--warn-soft);color:var(--warn)'}, 'sem gabarito')
+            : h('button', {class: 'btn primary', onclick: () => iniciarSimulado(p.id)}, 'Iniciar simulado')))));
+  };
+  $('#view').replaceChildren(
+    h('div', {class: 'row', style: 'margin-bottom:14px'}, h('h2', {}, 'Escolha uma prova'), h('span', {class: 'grow'}),
+      h('select', {style: 'width:auto', onchange: e => { fb = e.target.value; pinta(); }}, opcoes(bancas, '', 'Todas as bancas'))),
+    h('p', {class: 'muted', style: 'margin-top:0'}, 'Você responde tudo e só vê o gabarito ao finalizar, como numa prova de verdade.'), lista);
+  pinta();
+}
+async function iniciarSimulado(pid) {
+  const d = await api('/api/prova/' + encodeURIComponent(pid));
+  const S = {prova: d.prova, qs: d.questoes, resp: {}, flag: new Set(), i: 0, t0: Date.now()};
+  let timer;
+  const view = $('#view');
+  function desenhar() {
+    const q = S.qs[S.i];
+    const feitas = Object.keys(S.resp).length;
+    const topo = h('div', {class: 'sticky-run'}, h('div', {class: 'row'},
+      h('b', {}, `${S.prova.orgao} ${S.prova.ano}`), h('span', {class: 'muted'}, `${feitas}/${S.qs.length} respondidas`),
+      linkProva(S.prova.id, '📄 Abrir prova'), h('span', {class: 'grow'}), h('span', {id: 'tempo', class: 'muted'}, fmt(Math.floor((Date.now() - S.t0) / 1000))),
+      h('button', {class: 'btn primary', onclick: finalizar}, 'Finalizar')));
+    const nav = h('div', {class: 'nav-grid'}, S.qs.map((x, k) => h('button', {
+      class: [S.resp[x.id] ? 'done' : '', S.flag.has(x.id) ? 'flag' : '', k === S.i ? 'cur' : ''].join(' '), onclick: () => { S.i = k; desenhar(); }}, x.numero)));
+    const card = cartaoQuestao(q, {resp: S.resp[q.id], onEscolher: l => { S.resp[q.id] = l; desenhar(); }});
+    card.append(h('div', {class: 'row', style: 'margin-top:14px'},
+      h('button', {class: 'btn', disabled: S.i === 0, onclick: () => { S.i--; desenhar(); }}, '← Anterior'),
+      h('button', {class: 'btn', disabled: S.i === S.qs.length - 1, onclick: () => { S.i++; desenhar(); }}, 'Próxima →'),
+      h('button', {class: 'btn', onclick: () => { S.flag.has(q.id) ? S.flag.delete(q.id) : S.flag.add(q.id); desenhar(); }}, S.flag.has(q.id) ? 'Desmarcar revisão' : 'Marcar para revisão'),
+      S.resp[q.id] ? h('button', {class: 'btn', onclick: () => { delete S.resp[q.id]; desenhar(); }}, 'Limpar resposta') : null,
+      h('span', {class: 'grow'}), h('span', {class: 'muted'}, h('kbd', {}, 'A'), '–', h('kbd', {}, 'E'), ' responde · ', h('kbd', {}, '←'), h('kbd', {}, '→'))));
+    view.replaceChildren(topo, h('div', {class: 'layout', style: 'grid-template-columns:1fr 260px'}, card, h('aside', {style: 'top:120px'}, h('h3', {}, 'Questões'), nav)));
+  }
+  async function finalizar() {
+    const vazias = S.qs.length - Object.keys(S.resp).length;
+    if (vazias && !confirm(`Faltam ${vazias} questões sem resposta. Finalizar mesmo assim?`)) return;
+    clearInterval(timer); keyHandler = null;
+    const r = await api('/api/simulado', {prova_id: S.prova.id, respostas: S.resp});
+    resultado(S, r, Math.floor((Date.now() - S.t0) / 1000));
+  }
+  keyHandler = e => {
+    if (/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)) return;
+    const q = S.qs[S.i], k = e.key.toUpperCase();
+    if ('ABCDE'.includes(k) && k in q.alternativas && k.length === 1) { S.resp[q.id] = k; desenhar(); }
+    else if (e.key === 'ArrowRight' && S.i < S.qs.length - 1) { S.i++; desenhar(); }
+    else if (e.key === 'ArrowLeft' && S.i > 0) { S.i--; desenhar(); }
+  };
+  timer = setInterval(() => { const t = $('#tempo'); if (t) t.textContent = fmt(Math.floor((Date.now() - S.t0) / 1000)); }, 1000);
+  desenhar();
+}
+function resultado(S, r, seg) {
+  const p = pct(r.acertos, r.total);
+  let filtro = 'todas';
+  const revisao = h('div');
+  const pinta = () => revisao.replaceChildren(...S.qs.filter(q => {
+    const it = r.itens[q.id];
+    return filtro === 'todas' || (filtro === 'erradas' && !it.correta && it.resposta) || (filtro === 'branco' && !it.resposta);
+  }).map(q => {
+    const it = r.itens[q.id];
+    return cartaoQuestao(q, {resp: it.resposta, gabarito: it.gabarito, anulada: it.anulada, travado: true,
+      extra: it.sem_gabarito ? feedback(it) : it.resposta ? feedback(it) : h('div', {class: 'fb warn'}, `Em branco. Gabarito: ${it.gabarito || 'anulada'}`)});
+  }));
+  pinta();
+  const assuntos = Object.entries(r.por_assunto).sort((a, b) => b[1].total - a[1].total);
+  $('#view').replaceChildren(
+    h('div', {class: 'card'}, h('div', {class: 'row'},
+      h('div', {}, h('div', {class: 'muted'}, `${S.prova.orgao} ${S.prova.ano} · ${S.prova.banca}`), h('div', {class: 'score'}, `${p}%`),
+        h('div', {}, `${r.acertos} acertos em ${r.total} questões · tempo ${fmt(seg)}`)),
+      h('span', {class: 'grow'}), h('button', {class: 'btn primary', onclick: () => ir('simulado')}, 'Novo simulado')),
+      h('h3', {style: 'margin:18px 0 0'}, 'Por assunto'),
+      h('div', {class: 'bars'}, assuntos.map(([n, d]) => { const pp = pct(d.acertos, d.total); return h('div', {class: 'bar-row'}, h('span', {}, n),
+        h('div', {class: 'track'}, h('div', {class: 'fill ' + clsPct(pp), style: `width:${pp}%`})), h('span', {class: 'muted'}, `${d.acertos}/${d.total} · ${pp}%`)); }))),
+    h('div', {class: 'row', style: 'margin:18px 0 12px'}, h('h2', {}, 'Revisão'), h('span', {class: 'grow'}),
+      h('select', {style: 'width:auto', onchange: e => { filtro = e.target.value; pinta(); }},
+        h('option', {value: 'todas'}, 'Todas'), h('option', {value: 'erradas'}, 'Só erradas'), h('option', {value: 'branco'}, 'Em branco'))),
+    revisao);
+}
+
+/* ---------- Desempenho ---------- */
+async function viewDesempenho() {
+  const s = await api('/api/stats');
+  if (!s.respondidas) { $('#view').replaceChildren(h('div', {class: 'empty'}, 'Responda algumas questões para ver seu desempenho aqui.')); return; }
+  $('#view').replaceChildren(
+    h('div', {class: 'card'}, h('div', {class: 'muted'}, 'Geral'), h('div', {class: 'score'}, `${pct(s.acertos, s.respondidas)}%`),
+      h('div', {}, `${s.acertos} acertos em ${s.respondidas} respostas`),
+      h('h3', {style: 'margin:18px 0 0'}, 'Por assunto (do mais fraco ao mais forte)'),
+      h('div', {class: 'bars'}, s.por_assunto.slice().sort((a, b) => a.acertos / a.respondidas - b.acertos / b.respondidas).map(a => { const pp = pct(a.acertos, a.respondidas);
+        return h('div', {class: 'bar-row'}, h('span', {}, a.assunto), h('div', {class: 'track'}, h('div', {class: 'fill ' + clsPct(pp), style: `width:${pp}%`})),
+          h('span', {class: 'muted'}, `${a.acertos}/${a.respondidas} · ${pp}%`)); }))),
+    s.simulados.length ? h('div', {class: 'card'}, h('h2', {}, 'Simulados recentes'), ...s.simulados.map(x =>
+      h('div', {class: 'row', style: 'padding:6px 0;border-top:1px solid var(--line)'}, h('span', {class: 'tag'}, x.banca), `${x.orgao} ${x.ano}`,
+        h('span', {class: 'grow'}), h('span', {class: 'muted'}, x.quando), h('b', {}, `${x.acertos}/${x.respondidas}`)))) : null);
+}
+
+/* ---------- Início ---------- */
+function viewInicio() {
+  const ps = meta.provas, nq = ps.reduce((a, p) => a + p.n_questoes, 0), ng = ps.reduce((a, p) => a + p.n_gabarito, 0);
+  const anos = meta.anos.length ? `${Math.min(...meta.anos)}–${Math.max(...meta.anos)}` : '-';
+  const stat = (n, t) => h('div', {class: 'stat'}, h('b', {}, n), h('span', {}, t));
+  const feat = (ico, t, d, v) => h('div', {class: 'card' + (v ? ' link' : ''), onclick: v ? () => ir(v) : null},
+    h('div', {class: 'ico'}, ico), h('h3', {}, t), h('p', {}, d));
+  $('#view').replaceChildren(
+    h('section', {class: 'hero'},
+      h('span', {class: 'eyebrow'}, 'Provas de concursos · Tecnologia da Informação'),
+      h('h1', {}, 'Estude com provas reais, questão por questão.'),
+      h('p', {}, 'Um banco de questões montado a partir das provas e gabaritos de Analista de Sistemas do PCI Concursos. ' +
+        'Filtre por assunto, banca e ano, responda com correção imediata e faça simulados completos de verdade.'),
+      h('div', {class: 'row'},
+        h('button', {class: 'btn primary lg', onclick: () => ir('questoes')}, 'Praticar questões'),
+        h('button', {class: 'btn lg', onclick: () => ir('simulado')}, 'Fazer um simulado'))),
+    h('div', {class: 'stats'}, stat(nq.toLocaleString('pt-BR'), 'questões'), stat(ps.length, 'provas'),
+      stat(ng.toLocaleString('pt-BR'), 'com gabarito'), stat(meta.bancas.length, 'bancas'), stat(anos, 'período')),
+    h('h2', {class: 'sec-title'}, 'O que você pode fazer'),
+    h('div', {class: 'feat'},
+      feat('🔎', 'Filtrar e praticar', 'Escolha assunto (banco de dados, redes, engenharia de software…), banca, ano ou órgão e responda uma a uma, com o gabarito na hora.', 'questoes'),
+      feat('⏱️', 'Simulado', 'Responda a prova inteira sem ver o gabarito, marque questões para revisar e veja a nota e os erros ao finalizar.', 'simulado'),
+      feat('📈', 'Acompanhar o desempenho', 'Veja seu percentual de acerto por assunto e descubra onde estudar mais.', 'desempenho'),
+      feat('📄', 'Conferir no original', 'Cada questão tem um link para o PDF da prova, com textos de apoio e figuras preservados.')),
+    h('h2', {class: 'sec-title'}, 'Como o projeto funciona'),
+    h('ol', {class: 'steps'},
+      h('li', {}, h('b', {}, 'Baixa'), h('span', {}, 'Um script lê a lista do PCI Concursos e baixa as provas e os gabaritos (você resolve o captcha).')),
+      h('li', {}, h('b', {}, 'Extrai'), h('span', {}, 'Cada PDF vira questões com enunciado, alternativas, figuras, textos de apoio e gabarito correspondente.')),
+      h('li', {}, h('b', {}, 'Organiza'), h('span', {}, 'Tudo vai para um banco SQLite, com assunto classificado automaticamente, pronto para estudar.')),
+      h('li', {}, h('b', {}, 'Reaproveita'), h('span', {}, 'Os dados também saem em JSON (', h('code', {class: 'inl'}, 'out/questoes.json'), ') para usar em outros sistemas.'))),
+    h('p', {class: 'foot'}, 'Projeto de estudo pessoal. As provas pertencem às bancas organizadoras e foram obtidas no PCI Concursos; ' +
+      'a extração é automática e pode ter falhas, então confira o PDF original em caso de dúvida.'));
+}
+
+/* ---------- tema ---------- */
+function temaAtual() {
+  const t = document.documentElement.dataset.theme;
+  return t || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+}
+function pintaTema() { $('#tema').textContent = temaAtual() === 'dark' ? '☀️' : '🌙'; }
+$('#tema').addEventListener('click', () => {
+  const novo = temaAtual() === 'dark' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = novo;
+  try { localStorage.setItem('tema', novo); } catch (e) {}
+  pintaTema();
+});
+pintaTema();
+
+/* ---------- roteamento ---------- */
+function ir(v) {
+  keyHandler = null;
+  for (const b of document.querySelectorAll('nav button')) b.classList.toggle('on', b.dataset.v === v);
+  history.replaceState(null, '', '#' + v);
+  ({inicio: viewInicio, questoes: viewQuestoes, simulado: viewSimulado, desempenho: viewDesempenho})[v]();
+  scrollTo(0, 0);
+}
+document.addEventListener('keydown', e => keyHandler && keyHandler(e));
+$('#nav').addEventListener('click', e => e.target.dataset.v && ir(e.target.dataset.v));
+$('.logo').addEventListener('click', () => ir('inicio'));
+(async () => {
+  meta = await api('/api/meta');
+  $('#resumo').textContent = `${meta.provas.length} provas · ${meta.provas.reduce((a, p) => a + p.n_questoes, 0)} questões`;
+  const v = location.hash.slice(1);
+  ir(['inicio', 'questoes', 'simulado', 'desempenho'].includes(v) ? v : 'inicio');
+})();
+</script>
+</body>
+</html>

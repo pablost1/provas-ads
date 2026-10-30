@@ -1,0 +1,22 @@
+{
+  "id": "analista-analista-de-sistemas-corag-fundatec-2013",
+  "url": "https://www.pciconcursos.com.br/provas/download/analista-analista-de-sistemas-corag-fundatec-2013",
+  "cargo": "Analista - Analista de Sistemas",
+  "ano": "2013",
+  "orgao": "CORAG",
+  "banca": "FUNDATEC",
+  "arquivos": [
+    {
+      "arquivo": "analista_de_sistemas.pdf",
+      "tipo": "prova"
+    },
+    {
+      "arquivo": "gabaritos.pdf",
+      "tipo": "gabarito"
+    },
+    {
+      "arquivo": "gabaritos_definitivos.pdf",
+      "tipo": "gabarito"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "analista-administrativo-desenvolvimento-de-sistemas-anatel-cespe-2014",
+  "url": "https://www.pciconcursos.com.br/provas/download/analista-administrativo-desenvolvimento-de-sistemas-anatel-cespe-2014",
+  "cargo": "Analista Administrativo - Desenvolvimento de Sistemas",
+  "ano": "2014",
+  "orgao": "ANATEL",
+  "banca": "CESPE",
+  "arquivos": [
+    {
+      "arquivo": "03_analista_administrativo_desenvolvimento_de_sistemas_de_info_pdf.pdf",
+      "tipo": "prova"
+    },
+    {
+      "arquivo": "gabarito_preliminar_conhecimentos_basicos_para_os_cargos_2_3_e_6.pdf",
+      "tipo": "gabarito"
+    },
+    {
+      "arquivo": "gab_preliminar_todos_os_cargos_conhecimento_especifico.pdf",
+      "tipo": "gabarito"
+    }
+  ]
+}

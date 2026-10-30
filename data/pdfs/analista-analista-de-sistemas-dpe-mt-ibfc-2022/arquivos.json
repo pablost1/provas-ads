@@ -1,0 +1,18 @@
+{
+  "id": "analista-analista-de-sistemas-dpe-mt-ibfc-2022",
+  "url": "https://www.pciconcursos.com.br/provas/download/analista-analista-de-sistemas-dpe-mt-ibfc-2022",
+  "cargo": "Analista - Analista de Sistemas",
+  "ano": "2022",
+  "orgao": "DPE/MT",
+  "banca": "IBFC",
+  "arquivos": [
+    {
+      "arquivo": "analista_analista_de_sistemas.pdf",
+      "tipo": "prova"
+    },
+    {
+      "arquivo": "gabaritos_definitivos.pdf",
+      "tipo": "gabarito"
+    }
+  ]
+}

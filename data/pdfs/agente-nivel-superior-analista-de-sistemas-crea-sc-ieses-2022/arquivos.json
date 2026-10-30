@@ -1,0 +1,18 @@
+{
+  "id": "agente-nivel-superior-analista-de-sistemas-crea-sc-ieses-2022",
+  "url": "https://www.pciconcursos.com.br/provas/download/agente-nivel-superior-analista-de-sistemas-crea-sc-ieses-2022",
+  "cargo": "Agente Nível Superior - Analista de Sistemas",
+  "ano": "2022",
+  "orgao": "CREA/SC",
+  "banca": "IESES",
+  "arquivos": [
+    {
+      "arquivo": "agente_nivel_superior_analista_de_sistemas.pdf",
+      "tipo": "prova"
+    },
+    {
+      "arquivo": "gabaritos.pdf",
+      "tipo": "gabarito"
+    }
+  ]
+}
