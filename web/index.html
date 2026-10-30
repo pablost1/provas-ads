@@ -153,9 +153,93 @@ function h(tag, attrs, ...kids) {
   for (const c of kids.flat()) if (c != null && c !== false) e.append(c.nodeType ? c : document.createTextNode(c));
   return e;
 }
-const api = (p, body) => fetch(p, body ? {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)} : undefined).then(r => r.json());
+let ESTATICO = false;   // true quando não há servidor (GitHub Pages): os dados vêm de data/*.json e o progresso fica no navegador
+const api = (p, body) => ESTATICO ? apiEstatica(p, body)
+  : fetch(p, body ? {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)} : undefined).then(r => r.json());
+const urlImagem = f => (ESTATICO ? 'imagens/' : '/imagens/') + f;
+const urlPdf = pid => ESTATICO ? 'pdf/' + encodeURIComponent(pid) + '.pdf' : '/pdf/' + encodeURIComponent(pid);
+
+/* ---------- modo estático: reproduz a API do servidor no navegador ---------- */
+let DADOS = null, TENT = null;
+async function dadosEstaticos() {
+  if (!DADOS) {
+    const [m, q] = await Promise.all([fetch('data/provas.json').then(r => r.json()), fetch('data/questoes.json').then(r => r.json())]);
+    DADOS = {meta: m, qs: q, porId: new Map(q.map(x => [x.id, x]))};
+  }
+  return DADOS;
+}
+function tentativas() {
+  if (!TENT) { try { TENT = JSON.parse(localStorage.getItem('tentativas') || '[]'); } catch (e) { TENT = []; } }
+  return TENT;
+}
+function salvaTentativas() { try { localStorage.setItem('tentativas', JSON.stringify(TENT)); } catch (e) {} }
+const agora = () => new Date().toISOString().slice(0, 19).replace('T', ' ');
+const semGabarito = x => { const {gabarito, ...resto} = x; return resto; };
+async function apiEstatica(path, body) {
+  const D = await dadosEstaticos();
+  const [rota, query = ''] = path.split('?');
+  const qs = new URLSearchParams(query);
+  if (rota === '/api/meta') return D.meta;
+  if (rota === '/api/questoes') {
+    const t = (qs.get('q') || '').trim().toLowerCase(), ass = qs.getAll('assunto').filter(Boolean);
+    let itens = D.qs.map((q, i) => [q, i]).filter(([q]) =>
+      ['banca', 'ano', 'orgao', 'bloco', 'disciplina'].every(k => !qs.get(k) || String(q[k]) === qs.get(k)) &&
+      (!qs.get('prova') || q.prova_id === qs.get('prova')) &&
+      ass.every(a => q.assuntos.includes(a)) &&
+      (!t || [q.enunciado, ...Object.values(q.alternativas)].some(s => (s || '').toLowerCase().includes(t))) &&
+      (qs.get('com_gabarito') !== '1' || q.gabarito != null || q.anulada) &&
+      (qs.get('com_imagem') !== '1' || q.imagens.length));
+    const seed = qs.get('embaralhar');
+    if (/^\d+$/.test(seed || '')) itens.sort((a, b) => ((a[1] + 1) * 2654435761 + +seed) % 1000003 - ((b[1] + 1) * 2654435761 + +seed) % 1000003);
+    const lim = Math.min(+(qs.get('limite') || 20), 200), off = +(qs.get('deslocamento') || 0);
+    return {total: itens.length, itens: itens.slice(off, off + lim).map(([q]) => semGabarito(q))};
+  }
+  if (rota.startsWith('/api/prova/')) {
+    const pid = decodeURIComponent(rota.slice('/api/prova/'.length));
+    return {prova: D.meta.provas.find(p => p.id === pid), questoes: D.qs.filter(q => q.prova_id === pid).map(semGabarito)};
+  }
+  if (rota === '/api/tentativas') {
+    const q = D.porId.get(body.questao_id), resp = (body.resposta || '').toUpperCase();
+    if (!q) return {erro: 'questão inexistente'};
+    if (q.gabarito == null && !q.anulada) return {correta: null, gabarito: null, anulada: false, sem_gabarito: true};
+    const correta = q.anulada || resp === q.gabarito;
+    tentativas().push({simulado_id: 'pratica', prova_id: q.prova_id, questao_id: q.id, resposta: resp, correta: +correta, ts: agora()});
+    salvaTentativas();
+    return {correta, gabarito: q.gabarito, anulada: q.anulada};
+  }
+  if (rota === '/api/simulado') {
+    const sid = 'sim-' + Math.random().toString(16).slice(2, 12), itens = {}, por_assunto = {};
+    let acertos = 0;
+    for (const q of D.qs.filter(x => x.prova_id === body.prova_id)) {
+      const resp = ((body.respostas || {})[q.id] || '').toUpperCase();
+      if (q.gabarito == null && !q.anulada) { itens[q.id] = {resposta: resp, gabarito: null, correta: false, anulada: false, sem_gabarito: true}; continue; }
+      const correta = q.anulada || (resp !== '' && resp === q.gabarito);
+      itens[q.id] = {resposta: resp, gabarito: q.gabarito, correta, anulada: q.anulada};
+      acertos += correta;
+      for (const a of q.assuntos) { const d = por_assunto[a] ||= {total: 0, acertos: 0}; d.total++; d.acertos += correta; }
+      if (resp) tentativas().push({simulado_id: sid, prova_id: q.prova_id, questao_id: q.id, resposta: resp, correta: +correta, ts: agora()});
+    }
+    salvaTentativas();
+    const vals = Object.values(itens);
+    return {simulado_id: sid, total: vals.filter(i => !i.sem_gabarito).length, sem_gabarito: vals.filter(i => i.sem_gabarito).length, acertos, itens, por_assunto};
+  }
+  if (rota === '/api/stats') {
+    const T = tentativas(), pa = {}, sims = {};
+    for (const t of T) {
+      for (const a of D.porId.get(t.questao_id)?.assuntos || []) { const d = pa[a] ||= {assunto: a, respondidas: 0, acertos: 0}; d.respondidas++; d.acertos += t.correta; }
+      if (t.simulado_id.startsWith('sim-')) {
+        const s = sims[t.simulado_id] ||= {simulado_id: t.simulado_id, prova_id: t.prova_id, quando: t.ts, respondidas: 0, acertos: 0};
+        s.respondidas++; s.acertos += t.correta;
+      }
+    }
+    const simulados = Object.values(sims).map(s => { const p = D.meta.provas.find(x => x.id === s.prova_id) || {}; return {...s, orgao: p.orgao, ano: p.ano, banca: p.banca}; })
+      .sort((a, b) => b.quando.localeCompare(a.quando)).slice(0, 30);
+    return {respondidas: T.length, acertos: T.reduce((a, t) => a + t.correta, 0), por_assunto: Object.values(pa).sort((a, b) => b.respondidas - a.respondidas), simulados};
+  }
+  return {erro: 'rota desconhecida'};
+}
 const linkProva = (pid, txt = '📄 Abrir prova (PDF)') =>
-  h('a', {class: 'pdf-link', href: '/pdf/' + encodeURIComponent(pid), target: '_blank', rel: 'noopener'}, txt);
+  h('a', {class: 'pdf-link', href: urlPdf(pid), target: '_blank', rel: 'noopener'}, txt);
 const pct = (a, b) => b ? Math.round(100 * a / b) : 0;
 const clsPct = p => p >= 70 ? 'high' : p >= 50 ? 'mid' : 'low';
 const fmt = s => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
@@ -193,7 +277,7 @@ function cartaoQuestao(q, opt = {}) {
       h('summary', {}, q.texto.de === q.texto.ate ? 'Texto de apoio' : `Texto de apoio (questões ${q.texto.de} a ${q.texto.ate})`),
       h('div', {class: 'enun'}, q.texto.conteudo)) : null,
     h('div', {class: 'enun'}, q.enunciado),
-    q.imagens.length ? h('div', {class: 'figs'}, q.imagens.map(i => h('img', {src: '/imagens/' + i, loading: 'lazy', alt: 'figura da questão'}))) : null,
+    q.imagens.length ? h('div', {class: 'figs'}, q.imagens.map(i => h('img', {src: urlImagem(i), loading: 'lazy', alt: 'figura da questão'}))) : null,
     alts, opt.extra || null);
   marca();
   return card;
@@ -417,6 +501,8 @@ function viewInicio() {
       h('li', {}, h('b', {}, 'Extrai'), h('span', {}, 'Cada PDF vira questões com enunciado, alternativas, figuras, textos de apoio e gabarito correspondente.')),
       h('li', {}, h('b', {}, 'Organiza'), h('span', {}, 'Tudo vai para um banco SQLite, com assunto classificado automaticamente, pronto para estudar.')),
       h('li', {}, h('b', {}, 'Reaproveita'), h('span', {}, 'Os dados também saem em JSON (', h('code', {class: 'inl'}, 'out/questoes.json'), ') para usar em outros sistemas.'))),
+    ESTATICO ? h('p', {class: 'muted', style: 'margin:18px 0 0;font-size:13px'},
+      'Versão online: seu progresso (respostas e simulados) fica salvo apenas neste navegador.') : null,
     h('p', {class: 'foot'}, 'Projeto de estudo pessoal. As provas pertencem às bancas organizadoras e foram obtidas no PCI Concursos; ' +
       'a extração é automática e pode ter falhas, então confira o PDF original em caso de dúvida.'));
 }
@@ -447,7 +533,9 @@ document.addEventListener('keydown', e => keyHandler && keyHandler(e));
 $('#nav').addEventListener('click', e => e.target.dataset.v && ir(e.target.dataset.v));
 $('.logo').addEventListener('click', () => ir('inicio'));
 (async () => {
-  meta = await api('/api/meta');
+  try { meta = await (await fetch('/api/meta')).json(); if (!meta.provas) throw 0; }
+  catch (e) { ESTATICO = true; meta = (await dadosEstaticos()).meta; }
+
   $('#resumo').textContent = `${meta.provas.length} provas · ${meta.provas.reduce((a, p) => a + p.n_questoes, 0)} questões`;
   const v = location.hash.slice(1);
   ir(['inicio', 'questoes', 'simulado', 'desempenho'].includes(v) ? v : 'inicio');

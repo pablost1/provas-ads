@@ -47,3 +47,12 @@ A API (`/api/questoes?assunto=...&banca=...`) também serve para outros sistemas
 ## Dados por prova
 
 `out/provas.json` e `out/provas.csv` trazem uma linha por prova: `id`, `orgao`, `banca`, `ano`, `cargo`, `url` (página do PCI), arquivos de prova e gabarito usados, e contagens (`n_questoes`, `n_com_gabarito`, `n_anuladas`, `n_textos_apoio`, `n_com_imagem`). Em `questoes.json`, `prova_id` liga cada questão à sua prova, e `prova_titulo` repete "órgão · banca · ano · cargo". O `relatorio.txt` também começa cada linha com esses dados.
+
+## Site online (GitHub Pages)
+
+O GitHub Pages só serve arquivos estáticos, então não roda o `servidor.py`. Por isso existe uma versão estática do mesmo app:
+
+1. `python gerar_site.py` cria a pasta `docs/` (front-end, `data/*.json`, imagens e PDFs das provas).
+2. No GitHub: *Settings → Pages → Deploy from a branch* → escolha a branch e a pasta `/docs`.
+
+Nessa versão a correção acontece no navegador e o progresso (respostas e simulados) fica salvo no `localStorage` do próprio navegador. Rode `gerar_site.py` de novo sempre que reprocessar as provas.

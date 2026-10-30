@@ -5,3 +5,6 @@ __pycache__/
 # perfis de navegador (cookies/sessoes)
 data/brave-profile/
 data/browser-profile/
+
+# backups locais da extracao
+out_backup_*/
